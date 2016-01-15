@@ -14,6 +14,7 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
         <style>
             tr.winner td { color: #fff; background-color: #5cb85c;}
+            button.btn {margin-bottom:16px;}
         </style>
        
     </head>
@@ -21,6 +22,7 @@
         <div class="container">
             <h1>Raffle Picker</h1>
             <p>Enter names and then press the "Draw Winner" button to draw a winner.</p>
+            <p>Tip:  If using a keyboard, you can hit <kbd>TAB</kbd> after entering a Name to go to the "# Tickets" field.  You can then hit <kbd>ENTER</kbd> to create a new entry.</p>
             <div ng-controller="RafflePickerController">
                 <table class="table">
                     <tr>
