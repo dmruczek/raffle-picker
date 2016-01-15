@@ -12,6 +12,9 @@
 
 <!-- Optional theme -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+        <style>
+            tr.winner td { color: #fff; background-color: #5cb85c;}
+        </style>
        
     </head>
     <body >
@@ -32,7 +35,21 @@
                 <button class="btn btn-default" style="margin-right:12px;" ng-click="addNewParticipant()">Add New Participant</button>
                 <button class="btn btn-primary" style="margin-right:12px;" ng-click="drawWinner()">Draw Winner</button>
                 <button class="btn btn-danger" ng-click="reset()">Reset</button>
-                <h2 ng-if="winner">The winner is: {{winner}}</h2>
+                <h2 ng-if="winner">The winner is: {{winner.name}}</h2>
+                
+                <table ng-if="printedTickets" class="table table-bordered">
+                    <tr>
+                        <th>Ticket Number</th>
+                        <th>Participant</th>
+                    </tr>
+                    <tr ng-repeat="ticket in printedTickets" ng-class="{winner:ticket.ticketNumber === winningTicketNumber}">
+                        <td>{{ticket.ticketNumber}}</td>
+                        <td>{{ticket.name}}</td>
+                    </tr>
+                
+                </table>
+                
+                
             </div>
         </div>
     
@@ -46,19 +63,23 @@
             .controller("RafflePickerController", ['$scope', '$timeout', function($scope, $timeout) {
                 
                 $scope.drawWinner = function() {
-                    var entries = [], name, numTix, i, j, maxI, maxJ;
+                    var entries = [], name, numTix, i, j, maxI, maxJ, winningIndex, ticketNum = 1;
                     for (i = 0, maxI = $scope.participants.length; i < maxI; i++) {
                         name = $scope.participants[i].name;
                         numTix = $scope.participants[i].tickets;
                         if (!isNaN(numTix)) {
                             for (j = 0, maxJ = numTix; j < maxJ; j++) {
-                                entries.push(name);
+                                entries.push({name:name, ticketNumber:ticketNum});
+                                ticketNum++;
                             }
                         }
                     }
                     
-
-                    $scope.winner = entries[Math.floor(Math.random()*entries.length)];
+                    winningIndex = Math.floor(Math.random()*entries.length);
+                    $scope.winner = entries[winningIndex];
+                    $scope.printedTickets = entries;
+                    $scope.winningTicketNumber = winningIndex + 1;
+                    
                 };
                 
                 $scope.addNewParticipantOnEnter = function($event) {
@@ -78,6 +99,8 @@
                 $scope.reset = function() {
                     $scope.participants = [{name:"", tickets:""}];
                     $scope.winner = undefined;
+                    $scope.printedTickets = undefined;
+                    $scope.winningTicketNumber = undefined;
                 }
                 
                 $scope.reset();
